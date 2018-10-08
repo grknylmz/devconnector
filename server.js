@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+
 
 // Determine route constants
 const posts = require('./routes/api/posts');
@@ -26,8 +28,11 @@ mongoose
   .catch(err => console.log(err));
 
 
+//Passport Middleware
+app.use(passport.initialize());
 
-app.get("/", (req, res) => res.send(db));
+//Passport Config
+require('./config/passport')(passport);
 
 //Use rooutes
 app.use('/api/posts', posts);
