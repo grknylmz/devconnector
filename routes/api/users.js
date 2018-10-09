@@ -8,6 +8,11 @@ const config = require('../../config/keys');
 // Load User Model
 const User = require('../../models/User');
 const passport = require('passport');
+
+//Load Input Validation
+const validateRegisterInput = require('../../validation/register');
+
+
 //@route      GET /api/users/test
 //@desc       Tests Users Route
 //@access     Public
@@ -21,6 +26,15 @@ router.get("/test", (req, res) =>
 //@desc       Register Users
 //@access     Public
 router.post("/register", (req, res) => {
+  const {
+    errors,
+    isValid
+  } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    res.status(400).json(errors);
+  }
+
   User.findOne({
     email: req.body.email
   }).then(user => {
